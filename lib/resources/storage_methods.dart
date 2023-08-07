@@ -15,10 +15,6 @@ class StorageMethods {
 
     Reference ref =
         _storage.ref().child(childName).child(_auth.currentUser!.uid);
-    // if(isPost) {
-    //   String id = const Uuid().v1();
-    //   ref = ref.child(id);
-    // }
 
     // mettre au format uint8list -> Télécharger la tâche comme un future mais c'est pas un future
     UploadTask uploadTask = ref.putData(file);

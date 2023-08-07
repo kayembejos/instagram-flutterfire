@@ -57,7 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuntMethods().signUpUser(
+    String res = await AuthMethods().signUpUser(
       email: _emailController.text,
       password: _passwordController.text,
       username: _usernameController.text,
@@ -69,7 +69,23 @@ class _SignupScreenState extends State<SignupScreen> {
     });
     if (res != 'success') {
       showSnackBar(context, res);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+                  mobileScreenLayout: MobileScreenLayout(),
+                  webScreenLayout: WebScreenLayout(),
+                )),
+      );
     }
+  }
+
+  void navigateToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
   }
 
   Widget build(BuildContext context) {
@@ -183,15 +199,18 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
-                  Container(
-                    child: const Text(
-                      ' Login.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: navigateToLogin,
+                    child: Container(
+                      child: const Text(
+                        ' Login.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                  ),
+                  )
                 ],
               ),
             ],

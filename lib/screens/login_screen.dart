@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/resources/auth_methods.dart';
+import 'package:instagram_flutter/screens/signup_screen.dart';
+import 'package:instagram_flutter/responsive/mobile_screen_layout.dart';
+import 'package:instagram_flutter/responsive/web_screen_layout.dart';
+import 'package:instagram_flutter/responsive/responsive_layout_screen.dart';
 import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
@@ -27,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuntMethods().loginUser(
+    String res = await AuthMethods().loginUser(
       email: _emailController.text,
       password: _passwordController.text,
     );
@@ -35,8 +39,24 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = false;
     });
     if (res != 'success') {
-      showSnackBar(context, res);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+                  mobileScreenLayout: MobileScreenLayout(),
+                  webScreenLayout: WebScreenLayout(),
+                )),
+      );
+
+      //showSnackBar(context, res);
     }
+  }
+
+  void navigateToSignup() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SignupScreen(),
+      ),
+    );
   }
 
   @override
@@ -113,15 +133,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
-                  Container(
-                    child: const Text(
-                      ' Signup.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: navigateToSignup,
+                    child: Container(
+                      child: const Text(
+                        ' Signup.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                  ),
+                  )
                 ],
               ),
             ],
