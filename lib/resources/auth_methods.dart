@@ -1,7 +1,5 @@
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_flutter/resources/storage_methods.dart';
 import 'package:instagram_flutter/models/user.dart' as model;
@@ -14,10 +12,10 @@ class AuthMethods {
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
-    DocumentSnapshot snap =
+    DocumentSnapshot documentSnapshot =
         await _firestore.collection('users').doc(currentUser.uid).get();
 
-    return model.User.fromSnap(snap);
+    return model.User.fromSnap(documentSnapshot);
   }
 
 // Signing Up User
@@ -33,20 +31,17 @@ class AuthMethods {
       if (email.isNotEmpty ||
           password.isNotEmpty ||
           username.isNotEmpty ||
-          bio.isNotEmpty ||
-          file != null) {
+          bio.isNotEmpty) {
         // enregistrement du user dans auth avec email et password
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
 
-        print(cred.user!.uid);
-
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, false);
 
-        // ajout d'un user dans la BdD
+        // ajout d'un user dans la BDD
 
         model.User user = model.User(
           username: username,
@@ -95,7 +90,7 @@ class AuthMethods {
     return res;
   }
 
-  // Future<void> signOut() async {
-  //   await _auth.signOut();
-  // }
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
 }

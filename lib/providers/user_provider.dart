@@ -13,4 +13,8 @@ class UserProvider with ChangeNotifier {
     _user = user;
     notifyListeners();
   }
+
+  init() {}
+
+  static of(BuildContext context) {}
 }
